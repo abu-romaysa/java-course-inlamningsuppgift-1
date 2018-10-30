@@ -1,7 +1,8 @@
 package saldao8;
 
 /**
- * Skriver ut texten "Hej Värld!"
+ * This class implements the bank logic that manages customers
+ * and their accounts
  * 
  * @author Salim Daoud, saldao-8
  */
@@ -10,46 +11,59 @@ import java.util.ArrayList;
 
 public class BankLogic
 {
-    private ArrayList<Customer> customers = new ArrayList<Customer>(); // todo right way?
+    private ArrayList<Customer> customers = new ArrayList<Customer>();
     
+    /**
+     * Constructor
+     */
     public BankLogic()
     {
     }
     
+    /**
+     * Provides a list of information about all the customers in the bank system
+     * @return a list of strings containing information about all the customers
+     */
     public ArrayList<String> getAllCustomers()
     {
         ArrayList<String> customersInfo = new ArrayList<String>();
         
-        for (int i = 0; i < customers.size(); i++)
+        for(Customer customer : customers)
         {
-            customersInfo.add(customers.get(i).getFirstName() + " " + customers.get(i).getLastName() + " " + customers.get(i).getPersonalIdentityNumber());
+            customersInfo.add(customer.getFirstName() + " " + customer.getLastName() + " " + customer.getPersonalIdentityNumber());
         }
         
         return customersInfo;
     }
     
+    /**
+     * Creates and adds a new customer to the bank system
+     * @param firstName - new customer's first name
+     * @param lastName - new customer's last name
+     * @param personalIdentityNumber - new customer's personal identity number
+     * @return true if the customer could be created
+     */
     public boolean createCustomer(String firstName, String lastName, String personalIdentityNumber)
     {
-        boolean customerAlreadyExists = false;
+        boolean customerCreated = false;
         
-        for (int i = 0; i < customers.size(); i++)
+        Customer customer = findCustomer(personalIdentityNumber);
+        if(customer == null)
         {
-            if (customers.get(i).getPersonalIdentityNumber() == personalIdentityNumber)
-            {
-                customerAlreadyExists = true;
-            }
+            Customer newCustomer = new Customer(firstName, lastName, personalIdentityNumber);
+            customers.add(newCustomer);
+            customerCreated = true;
         }
         
-        if(!customerAlreadyExists)
-        {
-            Customer customer = new Customer(firstName, lastName, personalIdentityNumber);
-            customers.add(customer);
-            return true;
-        }
-        
-        return false;
+        return customerCreated;
     }
     
+    /**
+     * Provides information about a customer and her accounts
+     * @param personalIdentityNumber - belonging to the customer of interest
+     * @return list of strings containing information about the customer and 
+     *         her accounts
+     */
     public ArrayList<String> getCustomer(String personalIdentityNumber)
     {  
         Customer customer = findCustomer(personalIdentityNumber);
@@ -57,11 +71,10 @@ public class BankLogic
         { 
             ArrayList<String> customerInfo = new ArrayList<String>();
             customerInfo.add(customer.getFirstName() + " " + customer.getLastName() + " " + customer.getPersonalIdentityNumber());
-            
-            ArrayList<Integer> accounts = customer.getAccountIds();
-            for (int i = 0; i < accounts.size(); i++)
+                     
+            for(Integer accountId : customer.getAccountIds())
             {
-                customerInfo.add(customer.getAccount(accounts.get(i)));
+                customerInfo.add(customer.getAccount(accountId));
             }
   
             return customerInfo;
@@ -70,6 +83,13 @@ public class BankLogic
         return null;
     }
     
+    /**
+     * Changes a customer's first and last name
+     * @param firstName - first name to change to
+     * @param lastName - last name to change to
+     * @param personalIdentityNumber - belonging to the customer of interest
+     * @return true if the customer's full name could be changed
+     */
     public boolean changeCustomerName(String firstName, String lastName, String personalIdentityNumber)
     {
         Customer customer = findCustomer(personalIdentityNumber);
@@ -84,6 +104,13 @@ public class BankLogic
         return false;
     }
     
+    /**
+     * Deletes the customer from the bank system
+     * @param personalIdentityNumber - belonging to the customer of interest
+     * @return string containing information about the removed customer and her
+     *         removed accounts, otherwise null if the customer could not be 
+     *         deleted
+     */
     public ArrayList<String> deleteCustomer(String personalIdentityNumber)
     {
         Customer customer = findCustomer(personalIdentityNumber);
@@ -103,17 +130,31 @@ public class BankLogic
         return null;
     }
     
+    /**
+     * Closes a customer account
+     * @param personalIdentityNumber - belonging to the customer of interest 
+     * @param accountId - account ID to remove
+     * @return string containing information about the customer's closed account, 
+     *         otherwise null if it could not be closed 
+     */
     public String closeAccount(String personalIdentityNumber, int accountId)
     {
         Customer customer = findCustomer(personalIdentityNumber);
         if (customer != null)
         {
-            return customer.deleteAccount(accountId);
+            return customer.removeAccount(accountId);
         }
         
         return null;
     }
     
+    
+    /**
+     * Creates a saving account for a customer
+     * @param personalIdentityNumber - belonging to the customer of interest
+     * @return the account ID for the created account, otherwise the value -1
+     *         if it couldn't create an account 
+     */
     public int createSavingsAccount(String personalIdentityNumber)
     {
         Customer customer = findCustomer(personalIdentityNumber);
@@ -124,7 +165,14 @@ public class BankLogic
         
         return -1;
     }
-   
+
+    /**
+     * Provides information about a customer's account
+     * @param personalIdentityNumber - belonging to the customer of interest
+     * @param accountId - the account ID in question
+     * @return string containing information about the customer's account, otherwise null 
+     *         if it could not be found
+     */
     public String getAccount(String personalIdentityNumber, int accountId)
     {
         Customer customer = findCustomer(personalIdentityNumber);
@@ -134,21 +182,15 @@ public class BankLogic
         }
         
         return null;
-    }
-    
-    private Customer findCustomer(String personalIdentityNumber)
-    {
-        for (int i = 0; i < customers.size(); i++)
-        {
-            if (customers.get(i).getPersonalIdentityNumber() == personalIdentityNumber)
-            {
-                return customers.get(i);
-            }
-        }
-        
-        return null;
-    }
-    
+    }    
+
+    /**
+     * Deposits the amount to the customer's account
+     * @param personalIdentityNumber - belonging to the customer to deposit to
+     * @param accountId - account ID to deposit to
+     * @param amount - the amount to deposit
+     * @return true if the amount could be deposit
+     */
     public boolean deposit(String personalIdentityNumber, int accountId, double amount)
     {
         Customer customer = findCustomer(personalIdentityNumber);
@@ -160,6 +202,13 @@ public class BankLogic
         return false;
     }
     
+    /**
+     * Withdraws the amount from the customer's account
+     * @param personalIdentityNumber - belonging to the customer to withdraw from
+     * @param accountId - account ID to withdraw from
+     * @param amount - the amount to withdraw
+     * @return true if the amount could be withdrawn
+     */
     public boolean withdraw(String personalIdentityNumber, int accountId, double amount)
     {
         Customer customer = findCustomer(personalIdentityNumber);
@@ -171,44 +220,23 @@ public class BankLogic
         return false;
     }
 
-    /*static public void main(String[] args)
-    {
-        BankLogic bl = new BankLogic();
-        boolean created = bl.createCustomer("S", "D", "8111130376");
-        if (created) System.out.println("created");
+    /**
+     * Searches for a customer with a specific personal identity number
+     * @param personalIdentityNumber - personal identity number to lookup
+     * @return the customer with a specific personal identity number, 
+     *         otherwise null if the customer could not be found
+     */
+    private Customer findCustomer(String personalIdentityNumber)
+    {  
+        for(Customer customer : customers)
+        {
+            if(customer.getPersonalIdentityNumber() == personalIdentityNumber)
+            {
+                return customer;
+            }
+        }
         
-        created = bl.createCustomer("S", "D", "8111130372");
-        if (created) System.out.println("created"); else System.out.println("no");
-        
-        System.out.println("=============");
-        
-        System.out.println(bl.createSavingsAccount("8111130376"));
-        System.out.println(bl.createSavingsAccount("8111130376"));
-        
-        System.out.println("=============");
-        
-        System.out.println(bl.getAccount("8111130376", 1001));
-        
-        System.out.println("=============");
-        
-        System.out.println(bl.deposit("8111130376", 1002, 100));
-        System.out.println(bl.withdraw("8111130376", 1002, 10));
-        
-        System.out.println("=============");
-        
-        System.out.println(bl.getCustomer("8111130376"));
-        
-        System.out.println("=============");
-        
-        System.out.println(bl.changeCustomerName("H", "B", "8111130376"));
-        System.out.println(bl.getCustomer("8111130376"));
-        
-        System.out.println("=============");
-        
-        //System.out.println(bl.deleteCustomer("8111130376"));
-        System.out.println(bl.closeAccount("8111130376", 1002));
-        System.out.println(bl.getCustomer("8111130376"));
-        
-    }*/
+        return null;
+    }    
     
 }

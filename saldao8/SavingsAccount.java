@@ -1,84 +1,82 @@
 package saldao8;
 
 /**
- * Skriver ut texten "Hej Värld!"
+ * This class implements a saving account and it's needed support 
+ * and management as transactions, account information etc. 
  * 
  * @author Salim Daoud, saldao-8
  */
 
 public class SavingsAccount
 {
-    private double balance, interestRate; 
+    private double balance;
+    private static double interestRate;
     private int accountId;
-    final String accountType = "Saving account"; //todo final best?
-    static int accountIdCounter = 1001;
+    private final static String ACCOUNT_TYPE = "Saving account";
+    private static int accountIdCounter = 1001;
     
+    /**
+     * Constructor
+     */
     public SavingsAccount()
     {
-        this.accountId = accountIdCounter;
+        accountId = accountIdCounter;
         accountIdCounter+=1;
         
-        this.balance = 0;
-        this.interestRate = 1; // todo final?
+        balance = 0;
+        interestRate = 1;
     }
     
+    /**
+     * Deposits the amount to the account
+     * @param amount - the amount to deposit
+     */
     public void deposit(double amount)
     {
-        this.balance += amount;
+        balance += amount;
     }   
 
+    /**
+     * Withdraws the amount from the account if the full amount exists
+     * @param amount - the amount to withdraw
+     * @return true if amount is withdrawn otherwise false
+     */
     public boolean withdraw(double amount)
     {
-        if ( (this.balance - amount) < 0)
+        if ( (balance - amount) < 0 )
         {
             return false;
         }
         
-        this.balance -= amount;
+        balance -= amount;
         return true;
     }
     
+    /**
+     * Provides the account ID for this account
+     * @return account ID
+     */
     public int getAccountId()
     {
-        return this.accountId;
+        return accountId;
     }
 
+    /**
+     * Provides the amount of interest
+     * @return amount of interest
+     */
     public double getInterest()
     {
-        return (this.balance * (interestRate/100));
+        return (balance * (interestRate/100));
     }
     
+    /**
+     * Provides presentation information about the account
+     * @return string containing information about the account
+     */
     public String getAccountInfo()
     {
-        return Integer.toString(this.accountId) + " " + Double.toString(this.balance) + " " + this.accountType + " " + Double.toString(this.interestRate);
+        return Integer.toString(accountId) + " " + Double.toString(balance) + " " + ACCOUNT_TYPE + " " + Double.toString(interestRate);
     }
 
-    /*static public void main (String[] args)
-    {
-        SavingsAccount sa0 = new SavingsAccount();
-        System.out.println(sa0.getAccountInfo());
-        
-        /*System.out.println("test");
-        
-        System.out.println("============ 0");
-        SavingsAccount sa0 = new SavingsAccount();
-        sa0.print();
-        
-        System.out.println("============ 1");
-        SavingsAccount sa1 = new SavingsAccount();
-        sa1.print();
-        
-        System.out.println("============ 2");
-        SavingsAccount sa2 = new SavingsAccount();
-        sa2.print();
-        
-        System.out.println("============ delete 1");
-        sa1 = null;
-        
-        System.out.println("============ 3");
-        SavingsAccount sa3 = new SavingsAccount();
-        sa3.print();
-        
-        
-    }*/
 }
