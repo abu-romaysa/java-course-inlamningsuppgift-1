@@ -79,7 +79,7 @@ public class SavingsAccount
      * 
      * @return string containing information about the account
      */
-    public String getAccountInfo()
+    public String toString()
     {
         return Integer.toString(accountId) + " " + Double.toString(balance) + " " + ACCOUNT_TYPE + " "
                 + Double.toString(interestRate);

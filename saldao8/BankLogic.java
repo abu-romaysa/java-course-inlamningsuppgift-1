@@ -31,8 +31,7 @@ public class BankLogic
 
         for(Customer customer : customers)
         {
-            customersInfo.add(customer.getFirstName() + " " + customer.getLastName() + " "
-                    + customer.getPersonalIdentityNumber());
+            customersInfo.add(customer.toString());
         }
 
         return customersInfo;
@@ -74,8 +73,7 @@ public class BankLogic
         if(customer != null)
         {
             ArrayList<String> customerInfo = new ArrayList<String>();
-            customerInfo.add(customer.getFirstName() + " " + customer.getLastName() + " "
-                    + customer.getPersonalIdentityNumber());
+            customerInfo.add(customer.toString());
 
             for(Integer accountId : customer.getAccountIds())
             {
@@ -124,8 +122,7 @@ public class BankLogic
         if(customer != null)
         {
             ArrayList<String> deletedCustomerInfo = new ArrayList<String>();
-            deletedCustomerInfo.add(customer.getFirstName() + " " + customer.getLastName() + " "
-                    + customer.getPersonalIdentityNumber());
+            deletedCustomerInfo.add(customer.toString());
 
             ArrayList<String> deletedCustomerAccounts = customer.deleteAccounts();
             deletedCustomerInfo.addAll(deletedCustomerAccounts);

@@ -12,8 +12,7 @@ import java.util.ArrayList;
 public class Customer
 {
     private String firstName, lastName, personalIdentityNumber;
-    private ArrayList<SavingsAccount> accounts = new ArrayList<SavingsAccount>(); // todo
-                                                                                  // https://stackoverflow.com/a/38125288
+    private ArrayList<SavingsAccount> accounts = new ArrayList<SavingsAccount>();
 
     /**
      * Constructor
@@ -104,7 +103,7 @@ public class Customer
 
         for(SavingsAccount account : accounts)
         {
-            deletedAccountsInfo.add(account.getAccountInfo() + " " + Double.toString(account.getInterest()));
+            deletedAccountsInfo.add(account.toString() + " " + Double.toString(account.getInterest()));
         }
 
         accounts.clear();
@@ -124,7 +123,7 @@ public class Customer
         SavingsAccount account = findAccount(accountId);
         if(account != null)
         {
-            String deletedAccountInfo = account.getAccountInfo() + " " + Double.toString(account.getInterest());
+            String deletedAccountInfo = account.toString() + " " + Double.toString(account.getInterest());
             accounts.remove(account);
 
             return deletedAccountInfo;
@@ -145,7 +144,7 @@ public class Customer
         SavingsAccount account = findAccount(accountId);
         if(account != null)
         {
-            return account.getAccountInfo();
+            return account.toString();
         }
 
         return null;
@@ -203,6 +202,16 @@ public class Customer
         }
 
         return false;
+    }
+
+    /**
+     * Provides presentation information about the customer
+     * 
+     * @return string containing information about the customer
+     */
+    public String toString()
+    {
+        return firstName + " " + lastName + " " + personalIdentityNumber;
     }
 
     /**
