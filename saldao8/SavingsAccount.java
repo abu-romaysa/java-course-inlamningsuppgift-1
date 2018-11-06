@@ -20,6 +20,7 @@ public class SavingsAccount
      */
     public SavingsAccount()
     {
+        // assign an accountId and accumulate the counter that handles Ids
         accountId = accountIdCounter;
         accountIdCounter += 1;
 

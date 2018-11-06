@@ -49,8 +49,9 @@ public class BankLogic
     {
         boolean customerCreated = false;
 
+        // check if the customer exists i.e. findCustomer returns an object rather than null
         Customer customer = findCustomer(personalIdentityNumber);
-        if(customer == null)
+        if(customer == null) 
         {
             Customer newCustomer = new Customer(firstName, lastName, personalIdentityNumber);
             customers.add(newCustomer);
@@ -125,6 +126,8 @@ public class BankLogic
             deletedCustomerInfo.add(customer.toString());
 
             ArrayList<String> deletedCustomerAccounts = customer.deleteAccounts();
+            
+            // merge the two lists into one
             deletedCustomerInfo.addAll(deletedCustomerAccounts);
 
             customers.remove(customer);
